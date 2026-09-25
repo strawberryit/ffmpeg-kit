@@ -28,7 +28,8 @@ ${SED_INLINE} 's/${CMAKE_C_FLAGS} ${CMAKE_ASM_FLAGS}/${CMAKE_ASM_FLAGS}/g' "${BA
 mkdir -p "${BUILD_DIR}" || return 1
 cd "${BUILD_DIR}" || return 1
 
-cmake -Wno-dev \
+cmake -Wno-author \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DCMAKE_VERBOSE_MAKEFILE=0 \
   -DCMAKE_C_FLAGS="${CFLAGS}" \
   -DCMAKE_CXX_FLAGS="${CXXFLAGS}" \

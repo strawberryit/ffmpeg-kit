@@ -17,7 +17,8 @@ esac
 # ALWAYS CLEAN THE PREVIOUS BUILD
 git clean -dfx 2>/dev/null 1>/dev/null
 
-cmake -Wno-dev \
+cmake -Wno-author \
+ -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
  -DUSE_ENCLIB=openssl \
  -DCMAKE_VERBOSE_MAKEFILE=0 \
  -DCMAKE_C_FLAGS="${CFLAGS}" \
