@@ -28,7 +28,7 @@ When compilation ends, libraries are created under the prebuilt folder.\n"
 
   echo -e "Libraries:"
 
-  echo -e "  --full\t\t\tenables all non-GPL external libraries"
+  echo -e "  --full\t\t\tenables compatible external libraries (GPL requires --enable-gpl)"
   echo -e "  --enable-macos-audiotoolbox\tbuild with built-in Apple AudioToolbox support [no]"
   echo -e "  --enable-macos-avfoundation\tbuild with built-in Apple AVFoundation support [no]"
   echo -e "  --enable-macos-bzip2\t\tbuild with built-in bzip2 support [no]"

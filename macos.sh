@@ -154,6 +154,11 @@ done
 # PROCESS FULL OPTION AS LAST OPTION
 if [[ -n ${BUILD_FULL} ]]; then
   for library in {0..61}; do
+    # FFmpeg cannot use GnuTLS alongside OpenSSL, which is required by SRT.
+    if [[ $(get_library_name "$library") == "gnutls" ]]; then
+      continue
+    fi
+
     if [ ${GPL_ENABLED} == "yes" ]; then
       enable_library "$(get_library_name "$library")" 1
     else
