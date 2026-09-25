@@ -34,7 +34,8 @@ fi
   ${ASM_OPTIONS} \
   --host="${HOST}" || return 1
 
-make || return 1
+# Xvid's bool typedef is incompatible with the C23 mode selected by Autoconf.
+make CC="${CC} -std=c99" || return 1
 
 make install || return 1
 

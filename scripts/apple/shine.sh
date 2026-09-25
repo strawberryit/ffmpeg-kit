@@ -3,6 +3,9 @@
 # ALWAYS CLEAN THE PREVIOUS BUILD
 make distclean 2>/dev/null 1>/dev/null
 
+# Match the declaration to the definition for compilers that use C23 semantics.
+${SED_INLINE} 's/void shine_mdct_initialise();/void shine_mdct_initialise(shine_global_config *config);/' "${BASEDIR}"/src/"${LIB_NAME}"/src/lib/l3mdct.h || return 1
+
 # REGENERATE BUILD FILES IF NECESSARY OR REQUESTED
 if [[ ! -f "${BASEDIR}"/src/"${LIB_NAME}"/configure ]] || [[ ${RECONF_shine} -eq 1 ]]; then
   autoreconf_library "${LIB_NAME}" 1>>"${BASEDIR}"/build.log 2>&1 || return 1

@@ -14,6 +14,9 @@ esac
 # ALWAYS CLEAN THE PREVIOUS BUILD
 make distclean 2>/dev/null 1>/dev/null
 
+# Modern Apple SDKs define TARGET_OS_MAC but provide math.h, not fp.h.
+${SED_INLINE} 's/ || defined(TARGET_OS_MAC)//' "${BASEDIR}"/src/"${LIB_NAME}"/pngpriv.h || return 1
+
 # REGENERATE BUILD FILES IF NECESSARY OR REQUESTED
 if [[ ! -f "${BASEDIR}"/src/"${LIB_NAME}"/configure ]] || [[ ${RECONF_libpng} -eq 1 ]] || [[ $(is_gnu_config_files_up_to_date) == "0" ]]; then
 
