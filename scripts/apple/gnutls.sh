@@ -12,6 +12,12 @@ ${SED_INLINE} 's|gitlab.com/gnutls/cligen|github.com/arthenica/cligen|g' "${BASE
 ${SED_INLINE} 's|gitlab.com/redhat-crypto/tests/interop|github.com/arthenica/redhat-crypto-tests-interop|g' "${BASEDIR}"/src/"${LIB_NAME}"/.gitmodules || return 1
 
 # UPDATE BUILD FLAGS
+# Apple's system bison is too old to generate gnulib's parse-datetime.c.
+BISON_BIN="$(brew --prefix bison 2>/dev/null)/bin"
+if [[ -x "${BISON_BIN}/bison" ]]; then
+  export PATH="${BISON_BIN}:${PATH}"
+fi
+
 export CFLAGS="$(get_cflags ${LIB_NAME}) -I${SDK_PATH}/usr/include"
 export CXXFLAGS=$(get_cxxflags "${LIB_NAME}")
 export LDFLAGS="$(get_ldflags ${LIB_NAME}) -L${SDK_PATH}/usr/lib"
@@ -28,8 +34,11 @@ make distclean 2>/dev/null 1>/dev/null
 
 # REGENERATE BUILD FILES IF NECESSARY OR REQUESTED
 if [[ ! -f "${BASEDIR}"/src/"${LIB_NAME}"/configure ]] || [[ ${RECONF_gnutls} -eq 1 ]]; then
+  git submodule sync -- gnulib || return 1
+  git submodule update --init gnulib || return 1
+  # Gettext 1.0's autopoint counts the conditional and its body as two calls.
+  perl -0pi -e 's/m4_ifdef\(\[AM_GNU_GETTEXT_REQUIRE_VERSION\],\[\nAM_GNU_GETTEXT_REQUIRE_VERSION\(\[0\.19\]\)\n\]\)/AM_GNU_GETTEXT_REQUIRE_VERSION([0.19])/g' configure.ac || return 1
   ./bootstrap --skip-po || return 1
-  git submodule update --remote gnulib || return 1
   overwrite_file ./gnulib/lib/fpending.c ./src/gl/fpending.c || return 1
 fi
 
